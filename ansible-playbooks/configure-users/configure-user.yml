@@ -1,0 +1,17 @@
+- name: Manage and configure Users 
+  hosts: localhost
+  become: yes
+  tasks:
+    - name: Create group Developers
+      ansible.builtin.group:
+        name: developers
+
+    - name: Create Users
+      ansible.builtin.user:
+        name: "{{ item }}"
+        state: present
+        password: 'patitos'
+        group: developers
+      loop:
+        - devuser1
+        - devuser2

@@ -1,0 +1,26 @@
+---
+- name: This playbooks configure a server in localhost
+  hosts: localhost
+  become: yes
+  tasks:
+    - name: Install packege httpd
+      ansible.builtin.yum:
+        name: httpd
+        state: present
+
+    - name: Enabled and Started the httpd service
+      ansible.builtin.service:
+        name: httpd
+        enabled: true
+        state: started
+    
+    - name: Create file index.html
+      ansible.builtin.copy:
+        src: index.html
+        dest: /var/www/html/index.html
+        mode: '0644'
+    
+    - name: Verify that of the server web is up
+      ansible.builtin.uri:
+        url: http://localhost
+        return_content: no
