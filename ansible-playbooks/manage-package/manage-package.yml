@@ -1,0 +1,34 @@
+---
+- name: Manage the package in localhost
+  hosts: localhost
+  tasks:
+    - name: Install package
+      ansible.builtin.yum:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - git
+        - vim
+        - tree
+
+    - name: Ensure firewalld is installed
+      ansible.builtin.yum:
+        name: firewalld
+        state: present
+
+    - name: Verify status the firewalld
+      ansible.builtin.service:
+        name: firewalld
+        enabled: yes
+        state: started
+
+    - name: Enable port 80 in firewalld
+      ansible.posix.firewalld:
+        port: 80/tcp
+        permanent: true
+        immediate: yes
+        state: enabled
+        zone: public
+        
+
+
